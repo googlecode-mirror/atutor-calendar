@@ -750,7 +750,7 @@
                                 var button = $(
 								"<span class='fc-button fc-button-" + buttonName + " " + tm + "-state-default'>" +
 									"<span class='fc-button-inner'>" +
-										"<span class='fc-button-content'><a href='#'>" +
+										"<span class='fc-button-content'><a class='fc-hidden-link' href='#'>" +
 											(icon ?
 												"<span class='fc-icon-wrap'>" +
 													"<span class='ui-icon ui-icon-" + icon + "'/>" +
@@ -2236,7 +2236,7 @@
 				"<tr class='fc-week" + i + "'>";
                 for (j = 0; j < colCnt; j++) {
                     s +=
-					"<td class='fc- " + contentClass + " fc-day" + (i * colCnt + j) + "'><a href='#'>" + // need fc- for setDayID
+					"<td class='fc- " + contentClass + " fc-day" + (i * colCnt + j) + "'><a class='fc-hidden-link' href='#'>" + // need fc- for setDayID
 					"<div>" +
 					(showNumbers ?
 						"<div class='fc-day-number'/>" :
@@ -2270,7 +2270,13 @@
 
             dayBind(bodyCells);
             dayBind1(bodyCells.find("a"));
-
+			
+			$("a.fc-hidden-link").click(
+				function(event){
+					event.preventDefault();
+				}
+			);
+			
             daySegmentContainer =
 			$("<div style='position:absolute;z-index:8;top:0;left:0'/>")
 				.appendTo(element);
@@ -3057,7 +3063,7 @@
                 for (zz = 0; zz < colCnt; zz++) {
                     date = colDate(zz);
                     s +=
-				    "<td><a href='#'><div class='hidden'>" + (date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear()) + "</div>" + // fc- needed for setDayID
+				    "<td><a class='fc-hidden-link' href='#'><div class='hidden2'>" + (date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear()) + "</div>" + // fc- needed for setDayID
 				    "<div class='fc-day-content'><div style='position:relative'>&nbsp;</div></div>" +
 				    "</a></td>";
                 }
@@ -3117,7 +3123,7 @@
                 for (zz = 0; zz < colCnt; zz++) {
                     date = colDate(zz);
                     s +=
-				"<td  class='" + contentClass + "'><a href='#'><div class='hidden'>" + formatDate(d, opt('axisFormat')) + " of </div><div class='hidden1'>" + (date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear()) + "</div>" + // fc- needed for setDayID
+				"<td  class='" + contentClass + "'><a class='fc-hidden-link' href='#'><div class='hidden2'>" + formatDate(d, opt('axisFormat')) + " of </div><div class='hidden1'>" + (date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear()) + "</div>" + // fc- needed for setDayID
 				"<div style='position:relative'>&nbsp;</div>" +
 				"</a></td>";
                 }
@@ -3136,6 +3142,11 @@
             slotBind1(slotTable.find('td a'));
 
             axisFirstCells = axisFirstCells.add(slotTable.find('th:first'));
+			$("a.fc-hidden-link").click(
+				function(event){
+					event.preventDefault();
+				}
+			);
         }
 
 
@@ -3153,7 +3164,7 @@
                 //headCell.attr('abbr',date.getDate()+" "+monthNames[date.getMonth()]+" "+date.getFullYear());
                 headCell.html(formatDate(date, colFormat));
                 bodyCell = dayBodyCells.eq(i);
-                allDayCell = allDayRow.find('.hidden').eq(i);
+                allDayCell = allDayRow.find('.hidden2').eq(i);
                 allDayCell.html(date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear());
 
                 if (+date == +today) {
