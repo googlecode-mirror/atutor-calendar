@@ -3057,7 +3057,7 @@
                 for (zz = 0; zz < colCnt; zz++) {
                     date = colDate(zz);
                     s +=
-				    "<td><a href='#'>" + // fc- needed for setDayID
+				    "<td><a href='#'><div class='hidden'>" + (date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear()) + "</div>" + // fc- needed for setDayID
 				    "<div class='fc-day-content'><div style='position:relative'>&nbsp;</div></div>" +
 				    "</a></td>";
                 }
@@ -3117,7 +3117,7 @@
                 for (zz = 0; zz < colCnt; zz++) {
                     date = colDate(zz);
                     s +=
-				"<td  class='" + contentClass + "'><a href='#'>" + // fc- needed for setDayID
+				"<td  class='" + contentClass + "'><a href='#'><div class='hidden'>" + formatDate(d, opt('axisFormat')) + " of </div><div class='hidden1'>" + (date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear()) + "</div>" + // fc- needed for setDayID
 				"<div style='position:relative'>&nbsp;</div>" +
 				"</a></td>";
                 }
