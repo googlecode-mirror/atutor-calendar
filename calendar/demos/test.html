@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Dialog - Default functionality</title>
+	
+    <script type="text/javascript" src="../jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../jquery/jquery-ui-1.8.20.custom.min.js"></script>
+    <link rel='stylesheet' type='text/css' href='../jquery/jquery-ui-1.8.20.custom.css' />
+
+    <link rel='stylesheet' type='text/css' href='../fullcalendar/fullcalendar.css' />
+    <link rel='stylesheet' type='text/css' href='../fullcalendar/fullcalendar.print.css' media='print' />
+    <script type='text/javascript' src='../fullcalendar/fullcalendar.js'></script>
+       
+	<script>
+	    $(document).ready(function () {
+	        var date = new Date();
+	        var d = date.getDate();
+	        var m = date.getMonth();
+	        var y = date.getFullYear();
+            
+	        var calendar = $('#calendar').fullCalendar({
+	            header: {
+	                left: 'prev,next today',
+	                center: 'title',
+	                right: 'month,agendaWeek,agendaDay'
+	            },
+	            selectable: true,
+	            selectHelper: true,
+	            dayClick: function (date, allDay, jsEvent, view) {
+	                $("#dialog").dialog('open');
+	                $("#name").val("[event name]");
+
+	                $("#date-start").val($.fullCalendar.formatDate(date, 'MM/dd/yyyy'));
+	                //$("#date-start").datepicker("setDate", date);
+                    //$("#date-start").val($.fullCalendar.formatDate(date, 'MM/dd/yyyy'));
+					//alert( view.name );
+                    if( view.name == "month" )
+	                {
+						//alert("month");
+						document.getElementById("date-end").disabled = false;
+						$("#time-start").addClass("hidden");
+						$("#time-end").addClass("hidden");   
+                        $("#date-end").datepicker();
+						$("#date-end").datepicker("option", "minDate", date);
+	                    $("#date-end").datepicker("setDate", date);
+                    }
+                    else
+                    {
+                        document.getElementById("date-end").disabled = true;
+						$("#time-start").removeClass("hidden");
+						$("#time-end").removeClass("hidden");
+						$("#date-end").val($.fullCalendar.formatDate(date, 'MM/dd/yyyy'));
+						//$("#date-end").attr("disabled","true");
+						$("#time-start").val(date.getHours()+":"+date.getMinutes());
+						
+						select = $('#time-end');
+						$("#time-end > option").each(function() {
+    						$(this).remove();
+						});
+						var startpt = date.getHours();
+						var bol = false;
+						if( date.getMinutes() == 0 )
+                        	bol = false;
+                    	else
+						{
+							startpt++;							
+                        	bol = true;
+						}
+            			for(zz=startpt;zz<=24;zz++)
+            			{
+							if( zz == 24 )
+							{
+								select.append("<option value='"+zz+":0' >"+zz+"</option>");
+							}
+							else
+							{
+								if( bol )	
+                				{
+									select.append("<option value='"+zz+":0' >"+zz+"</option>");
+								}
+								select.append("<option value='"+zz+":30' >"+zz+":30"+"</option>");
+								bol = true;
+								
+							}
+								
+            			}
+						
+                    	if( date.getMinutes() == 0 )
+                        	$("#time-end").val(date.getHours()+":30");
+                    	else
+                        	$("#time-end").val((parseInt(date.getHours())+1)+":0");
+                    }
+
+	                $("#viewname").val(view.name);	                
+	            },
+
+	            editable: true,
+	            events: [
+				{
+				    title: 'All Day Event',
+				    start: new Date(y, m, 1)
+				},
+				{
+				    title: 'Long Event',
+				    start: new Date(y, m, d - 5),
+				    end: new Date(y, m, d - 2)
+				},
+				{
+				    id: 999,
+				    title: 'Repeating Event',
+				    start: new Date(y, m, d - 3, 16, 0),
+				    allDay: false
+				},
+				{
+				    id: 999,
+				    title: 'Repeating Event',
+				    start: new Date(y, m, d + 4, 16, 0),
+				    allDay: false
+				},
+				{
+				    title: 'Meeting',
+				    start: new Date(y, m, 8, 10, 30),
+				    allDay: false
+				},
+				{
+				    title: 'Lunch',
+				    start: new Date(y, m, 9, 12, 0),
+				    end: new Date(y, m, 9, 23, 30),
+				    allDay: false
+				},
+				{
+				    title: 'Birthday Party',
+				    start: new Date(y, m, d + 1, 3, 0),
+				    end: new Date(y, m, d + 1, 4, 0),
+				    allDay: false
+				},
+				{
+				    title: 'Click for Google',
+				    start: new Date(y, m, 28),
+				    end: new Date(y, m, 29),
+				    url: 'http://google.com/'
+				}
+			]
+	        });
+
+	        $("#dialog").dialog({
+	            autoOpen: false,
+	            height: 350,
+	            width: 700,
+	            modal: true,
+	            buttons: {
+	                'Create event': function () {
+                    var startsplt = $("#date-start").val().split("/");
+                    var ends =  $.fullCalendar.formatDate($("#date-end").datepicker("getDate"), 'MM/dd/yyyy');
+                    var endsplt = ends.split("/");
+
+                    var timestr = $('#time-start').val().split(':');
+                    var timestp = $('#time-end').val().split(':');
+
+                    if( startsplt[1].charAt(0) == '0' )
+                    {
+                        startsplt[1] = startsplt[1].charAt(1);
+                    }
+                    if( endsplt[1].charAt(0) == '0' )
+                    {
+                        endsplt[1] = endsplt[1].charAt(1);
+                    }
+                    if( startsplt[0].charAt(0) == '0' )
+                    {
+                        startsplt[0] = startsplt[0].charAt(1);
+                    }
+                    if( endsplt[0].charAt(0) == '0' )
+                    {
+                        endsplt[0] = endsplt[0].charAt(1);
+                    }
+                    
+                     if( $('#viewname').val() == "month" )
+                        {
+                            calendar.fullCalendar('renderEvent',
+				                {
+				                    title: $("#name").val(),
+				                    start: new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1])),
+				                    end: new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1])),				                                       
+				                },
+				            true // make the event "stick"
+			    	        );
+	                        $(this).dialog('close');
+	                    }
+                        else
+                        {
+                            calendar.fullCalendar('renderEvent',
+				                {
+				                    title: $("#name").val(),
+				                    start: new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1]),timestr[0],timestr[1]),
+				                    end: new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]),timestp[0],timestp[1]),
+                                    allDay: false,		                                        
+				                },
+				            true // make the event "stick"
+			    	        );
+	                        $(this).dialog('close');
+                        }
+                    },
+	                Cancel: function () {
+	                    $(this).dialog('close');
+	                }
+	            },
+	            close: function () {
+	            }
+
+	        });
+            //add new time rows
+            select = $('#time-end');
+            for(zz=0;zz<=23;zz++)
+            {
+                select.append("<option value='"+zz+":0' >"+zz+"</option>");
+                select.append("<option value='"+zz+":30' >"+zz+":30"+"</option>");
+            }
+        });
+	</script>
+</head>
+
+<body>
+
+ <div id="dialog" class="event-dialog" title="Event">
+            <div id="dialog-inner">
+                <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all title"><br>
+                <span class="inline">From:</span>
+                <br />
+                <span class="inline"><input type="text" name="date-start" id="date-start" disabled="disabled" class="text ui-widget-content ui-corner-all"></span>
+                <span class="inline"><input type="text" name="time" id="time-start" disabled="disabled" class="text ui-widget-content ui-corner-all"></span>
+                <br />
+                <span class="inline">To:</span>
+                <br /> 
+                <span class="inline"><input type="text" name="date" id="date-end" class="text ui-widget-content ui-corner-all"></span>
+                <span class="inline"><!--<input type="text" name="time" id="time-end" class="text ui-widget-content ui-corner-all">--></span>
+                    <select name="time" id="time-end" class="text ui-widget-content ui-corner-all">
+                    </select>
+                <br />
+                <input type="hidden" id="viewname" />                
+            </div>
+        </div>
+        <div id="calendar"></div>
+
+</body>
+</html>
