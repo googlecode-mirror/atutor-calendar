@@ -50,7 +50,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 				//get new start date, end date and send it to the db
 				var newsdate = $.fullCalendar.formatDate(event.start,"yyyy-MM-dd HH:mm") +":00"; 
 				var newedate = $.fullCalendar.formatDate(event.end,"yyyy-MM-dd HH:mm") +":00"; 
-				$.get("update.php",{id:event.id, start:newsdate, end:newedate, title:'',allday:'', cmd:"drag"});
+				$.get("mods/calendar/update.php",{id:event.id, start:newsdate, end:newedate, title:'',allday:'', cmd:"drag"});
 			},
 			
 			/* Add tooltip to cells. */
@@ -335,61 +335,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			/* Events are editable. */
 			editable: false,
 			/* Retrieve events from php file. */
-			events: [
-				{
-					id: 1,
-				    title: 'All Day Event',
-				    start: new Date(y, m, 1),
-				    end: new Date(y,m,1)
-				},
-				{
-					id: 2,
-				    title: 'Long Event',
-				    start: new Date(y, m, d - 5),
-				    end: new Date(y, m, d - 2)
-				},
-				{
-				    id: 3,
-				    title: 'Repeating Event',
-				    start: new Date(y, m, d - 3, 16, 0),
-					end: new Date(y, m, d - 3, 18, 0),
-				    allDay: false
-				},
-				{
-				    id: 4,
-				    title: 'Test Event',
-				    start: new Date(y, m, d + 4, 16, 0),
-					end: new Date(y, m, d + 4, 18, 0),
-				    allDay: false
-				},
-				{
-					id: 5,
-				    title: 'Meeting',
-				    start: new Date(y, m, 8, 10, 30),
-					end: new Date(y, m, 8, 13, 0),
-				    allDay: false					
-				},
-				{
-					id: 6,
-				    title: 'Lunch',
-				    start: new Date(y, m+2, 9, 12, 0),
-				    end: new Date(y, m, 9, 23, 30),
-				    allDay: false					
-				},
-				{
-					id: 7,
-				    title: 'Birthday Party',
-				    start: new Date(y, m, d + 1, 3, 0),
-				    end: new Date(y, m, d + 1, 4, 0),
-				    allDay: false					
-				},
-				{
-					id: 8,
-				    title: 'Click for Google',
-				    start: new Date(y, m, 28),
-				    end: new Date(y, m, 29)				    
-				}
-			]
+			events: "mods/calendar/json-events.php"
 		});
 		
 		/*Create event jQuery dialog*/
@@ -437,7 +383,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 
 						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
 						var mysqlendd = $.fullCalendar.formatDate(new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
-						$.get("update.php",{id:'',start:mysqlstartd, end:mysqlendd, title:$("#name").val(), cmd:"create",allday:"true"},function(data){ newid = data; 
+						$.get("mods/calendar/update.php",{id:'',start:mysqlstartd, end:mysqlendd, title:$("#name").val(), cmd:"create",allday:"true"},function(data){ newid = data; 
 							calendar.fullCalendar('renderEvent',
 							{
 								id: newid, 
@@ -453,7 +399,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					{
 						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]), 'yyyy-MM-dd HH:mm')+":00";
 						var mysqlendd = $.fullCalendar.formatDate( new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]), 'yyyy-MM-dd HH:mm')+":00";
-						$.get("update.php",{id:'',start:mysqlstartd, end:mysqlendd, title:$("#name").val(), cmd:"create",allday:"false"}, function(data){ newid = data; 
+						$.get("mods/calendar/update.php",{id:'',start:mysqlstartd, end:mysqlendd, title:$("#name").val(), cmd:"create",allday:"false"}, function(data){ newid = data; 
 						calendar.fullCalendar('renderEvent',
 							{
 								id: newid,
@@ -484,7 +430,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			buttons: {
 				'Delete Event': function() {
 					//delete event from db
-					$.get("update.php",{id:$("#ori-name1").val(),start:'',end:'',title:'',allday:'',cmd:"delete"});
+					$.get("mods/calendar/update.php",{id:$("#ori-name1").val(),start:'',end:'',title:'',allday:'',cmd:"delete"});
 					calendar.fullCalendar('removeEvents',
 					function( ev ){
 						//remove event data from hidden elements
@@ -610,7 +556,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					{
 						var mysqlendd = $.fullCalendar.formatDate(new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
 						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
-						$.get("update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"true"});
+						$.get("mods/calendar/update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"true"});
 						calendar.fullCalendar('renderEvent',
 						{
 							id: $("#ori-name1").val(),
@@ -626,7 +572,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					{
 						var mysqlendd = $.fullCalendar.formatDate( new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]), 'yyyy-MM-dd HH:mm')+":00";
 						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]), 'yyyy-MM-dd HH:mm')+":00";
-						$.get("update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"false"});
+						$.get("mods/calendar/update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"false"});
 						calendar.fullCalendar('renderEvent',
 							{
 								id: $("#ori-name1").val(),
