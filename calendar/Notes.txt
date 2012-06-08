@@ -1,0 +1,3 @@
+Create all the necessary files for module: module.php, module.xml, module_install.php,
+module_uninstall.php, module.sql files
+Include patch folder in the module and make necessary changes

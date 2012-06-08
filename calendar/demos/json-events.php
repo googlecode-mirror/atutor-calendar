@@ -1,28 +1,31 @@
 <?php
-
-	$year = date('Y');
-	$month = date('m');
-
-	echo json_encode(array(
+	//Connect to database.
+	$con = mysql_connect("localhost","root","root");
+	if (!$con)
+	{
+	  die('Could not connect: ' . mysql_error());
+	}
+	//Select database "test".
+	mysql_select_db("test");
 	
-		array(
-			'id' => 111,
-			'title' => "Event1",
-			'start' => "$year-$month-10",
-			'url' => "http://yahoo.com/"
-		),
-		
-		array(
-			'id' => 222,
-			'title' => "Event2",
-			'start' => "$year-$month-20",
-			'end' => "$year-$month-22",
-			'url' => "http://yahoo.com/",
-			'color' => "rgb(0,128,128)",
-			'borderColor' => "rgb(0,0,0)",
-			'textColor' => "rgb(0,64,23)"
-		)
+	//Retrieve all the events.
+	$query = "SELECT * FROM `full-calendar-events`";
+	$result = mysql_query($query);
 	
-	));
-
+	//Create an empty array and push all the events in it.
+	$rows = array();
+	while ($row = mysql_fetch_assoc($result)) 
+	{
+		array_push( $rows, $row );		
+	}
+	
+	//Encode in JSON format.
+	$str =  json_encode( $rows );
+	
+	//Replace "true","false" with true,false for javascript.
+	$str = str_replace('"true"','true',$str);
+	$str = str_replace('"false"','false',$str);
+	
+	//Return the events in the JSON format.
+	echo $str;
 ?>

@@ -21,7 +21,16 @@ $this->_list['calendar'] = array('title_var'=>'ATutor Calendar','file'=>'mods/ca
 define('AT_PRIV_CALENDAR',       $this->getPrivilege());
 define('AT_ADMIN_PRIV_CALENDAR', $this->getAdminPrivilege());
 global $_custom_head;
-/*$_custom_head .='<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/><link href="'.AT_BASE_HREF.'mods/calendar/css/jquery.tooltip.css" rel="stylesheet" type="text/css"/><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script><script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>'."\n".'<script type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/js/date.js"></script>'."\n".'<script type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/js/datePicker.js"></script>'."\n".'<script type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/js/unserialize.js"></script>'."\n".'<script type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/js/calendar.js"></script>'."\n".'<script type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/js/jquery.tools.min.js"></script>'."\n".'<script type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/js/strtotime.js"></script>'."\n".'<script type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/js/phpdate.js"></script>'."\n";*/
+$_custom_head .=
+'   
+<script language="javascript" type="text/javascript" src="'.AT_BASE_HREF.'jscripts/infusion/InfusionAll.js"></script>
+<script language="javascript" type="text/javascript" src="'.AT_BASE_HREF.'jscripts/lib/calendar.js"></script>
+
+<script language="javascript" type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/fullcalendar/fullcalendar-theme.js"></script>
+<link href="'.AT_BASE_HREF.'mods/calendar/jquery/jquery-ui-1.8.20.custom.css" rel="stylesheet" type="text/css"/>
+
+<link href="'.AT_BASE_HREF.'jscripts/infusion/lib/jquery/plugins/tooltip/css/jquery.tooltip.css" rel="stylesheet" type="text/css"/>';
+
 /*******
  * create a side menu box/stack.
  */

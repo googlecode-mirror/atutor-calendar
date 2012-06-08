@@ -1,15 +1,24 @@
-<?php
-define('AT_INCLUDE_PATH', '../../include/');
-require (AT_INCLUDE_PATH.'vitals.inc.php');
-
-$_custom_css = $_base_path . 'mods/calendar/fullcalendar/fullcalendar-theme.css'; // use a custom stylesheet
-
-require (AT_INCLUDE_PATH.'header.inc.php');
-?> 
-<a href='#' onclick='scwShow(this,event);return false;'>
-     2012-08-20
-</a>
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Full Calendar Demo</title>
+	
+    <link rel="stylesheet" type="text/css" href="../jquery/lib/jquery/plugins/tooltip/css/jquery.tooltip.css" />
+    <link rel='stylesheet' type='text/css' href='../jquery/jquery-ui-1.8.20.custom.css' />
+	<link rel='stylesheet' type='text/css' href='../fullcalendar/fullcalendar-theme.css' />
+    <link rel='stylesheet' type='text/css' href='../fullcalendar/fullcalendar.print.css' media='print' />
+    
+	<script type="text/javascript" src="../jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../jquery/jquery-ui-1.8.20.custom.min.js"></script>
+   	<script type="text/javascript" src="../jquery/lib/jquery/plugins/tooltip/js/jquery.ui.tooltip.js"></script>
+    <script type="text/javascript" src="../jquery/framework/core/js/FluidDocument.js"></script>
+    <script type="text/javascript" src="../jquery/framework/core/js/Fluid.js"></script>
+    <script type="text/javascript" src="../jquery/framework/core/js/DataBinding.js"></script>
+    <script type="text/javascript" src="../jquery/components/tooltip/js/Tooltip.js"></script>
+    <script type='text/javascript' src='../fullcalendar/fullcalendar-theme.js'></script>
+ 
+	<script>
 	$(document).ready(function () {
 		/* Get current date for calculations. */
 		var date = new Date();
@@ -23,7 +32,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			/*defaultView: 'agendaWeek',*/
 			
 			/* Apply theme */
-			theme: false,
+			theme: true,
 			
 			/* Header details */
 			header: {
@@ -110,6 +119,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			},
 			/* Event is clicked. So open dialog for editing event. */
 			eventClick: function(calevent,jsEvent,view){
+				
 				$("#fc-emode1").val("edit");
 				$("#dialog1").dialog('open');	                
 				//display event name in the event title input box
@@ -117,7 +127,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 				
 				var date = calevent.start;
 				//display start date
-				$("#date-start1").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
+				$("#date-start1").val($.fullCalendar.formatDate(date, 'MM/dd/yyyy'));
 				//store event id for manipulation
 				$("#ori-name1").val( calevent.id );
 				
@@ -134,32 +144,14 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					$("#lbl-start-time1").addClass("fc-form-hide");
 					 
 					//add and set datepickers
-					$("#date-start1").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
-					$("#date-start1").focus(
-						function (ev){
-							scwShow(this,ev);							
-						}
-					);
-					$("#date-start1").click(
-						function (ev){
-							scwShow(this,ev);
-						}
-					);
-										
+					$("#date-start1").datepicker();
+					$("#date-start1").datepicker("setDate", date);
+					$("#date-end1").datepicker();
+					
 					if( calevent.end != null )
-						$("#date-end1").val($.fullCalendar.formatDate(calevent.end, 'yyyy-MM-dd'));
+						$("#date-end1").datepicker("setDate", calevent.end);
 					else
-						$("#date-end1").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
-					$("#date-end1").focus(
-						function (ev){
-							scwShow(this,ev);							
-						}
-					);
-					$("#date-end1").click(
-						function (ev){
-							scwShow(this,ev);
-						}
-					);
+						$("#date-end1").datepicker("setDate", date);
 				}
 				else
 				{
@@ -170,35 +162,18 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					$("#lbl-end-time1").removeClass("fc-form-hide");
 					$("#lbl-start-time1").removeClass("fc-form-hide");
 					
-					$("#date-end1").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
+					$("#date-end1").val($.fullCalendar.formatDate(date, 'MM/dd/yyyy'));
 					$("#time-start1").val(date.getHours()+":"+date.getMinutes());
 					
 					//add and set datepickers
-					$("#date-start1").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
-					$("#date-start1").focus(
-						function (ev){
-							scwShow(this,ev);							
-						}
-					);
-					$("#date-start1").click(
-						function (ev){
-							scwShow(this,ev);
-						}
-					);
+					$("#date-start1").datepicker();
+					$("#date-start1").datepicker("setDate", date);
+					$("#date-end1").datepicker();
+					
 					if( calevent.end != null )
-						$("#date-end1").val($.fullCalendar.formatDate(calevent.end, 'yyyy-MM-dd'));
+						$("#date-end1").datepicker("setDate", calevent.end);
 					else
-						$("#date-end1").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
-					$("#date-end1").focus(
-						function (ev){
-							scwShow(this,ev);							
-						}
-					);
-					$("#date-end1").click(
-						function (ev){
-							scwShow(this,ev);
-						}
-					);
+						$("#date-end1").datepicker("setDate", date);
 					
 					//adjust start time and end time dropdown boxes so that the current values are displayed first
 					select = $('#time-end1');
@@ -253,13 +228,12 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			},
 			/* Cell is clicked. So open dialog for creating new event. */
 			select: function (date,end, allDay, jsEvent, view) {
-				
 				$("#fc-emode").val("create");					
 				$("#dialog").dialog('open');
 				//display event title in the input box
 				$("#name").val("[event name]");
 				//display start date
-				$("#date-start").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
+				$("#date-start").val($.fullCalendar.formatDate(date, 'MM/dd/yyyy'));
 				//if allday is true then disable time elements else enable them
 				if( allDay == true )
 				{
@@ -271,17 +245,9 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					$("#lbl-end-time").addClass("fc-form-hide");
 					$("#lbl-start-time").addClass("fc-form-hide");
 					//add and set date pickers
-					$("#date-end").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
-					$("#date-end").focus(
-						function (ev){
-							scwShow(this,ev);							
-						}
-					);
-					$("#date-end").click(
-						function (ev){
-							scwShow(this,ev);
-						}
-					);									
+					$("#date-end").datepicker();
+					$("#date-end").datepicker("option", "minDate", date);
+					$("#date-end").datepicker("setDate", date);
 				}
 				else
 				{
@@ -291,7 +257,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					$("#time-end").removeClass("fc-form-hide");
 					$("#lbl-end-time").removeClass("fc-form-hide");
 					$("#lbl-start-time").removeClass("fc-form-hide");
-					$("#date-end").val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
+					$("#date-end").val($.fullCalendar.formatDate(date, 'MM/dd/yyyy'));
 					$("#time-start").val(date.getHours()+":"+date.getMinutes());
 					
 					select = $('#time-end');
@@ -333,86 +299,32 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 				$("#viewname").val(view.name);	                
 			},
 			/* Events are editable. */
-			editable: false,
+			editable: true,
 			/* Retrieve events from php file. */
-			events: [
-				{
-					id: 1,
-				    title: 'All Day Event',
-				    start: new Date(y, m, 1),
-				    end: new Date(y,m,1)
-				},
-				{
-					id: 2,
-				    title: 'Long Event',
-				    start: new Date(y, m, d - 5),
-				    end: new Date(y, m, d - 2)
-				},
-				{
-				    id: 3,
-				    title: 'Repeating Event',
-				    start: new Date(y, m, d - 3, 16, 0),
-					end: new Date(y, m, d - 3, 18, 0),
-				    allDay: false
-				},
-				{
-				    id: 4,
-				    title: 'Test Event',
-				    start: new Date(y, m, d + 4, 16, 0),
-					end: new Date(y, m, d + 4, 18, 0),
-				    allDay: false
-				},
-				{
-					id: 5,
-				    title: 'Meeting',
-				    start: new Date(y, m, 8, 10, 30),
-					end: new Date(y, m, 8, 13, 0),
-				    allDay: false					
-				},
-				{
-					id: 6,
-				    title: 'Lunch',
-				    start: new Date(y, m+2, 9, 12, 0),
-				    end: new Date(y, m, 9, 23, 30),
-				    allDay: false					
-				},
-				{
-					id: 7,
-				    title: 'Birthday Party',
-				    start: new Date(y, m, d + 1, 3, 0),
-				    end: new Date(y, m, d + 1, 4, 0),
-				    allDay: false					
-				},
-				{
-					id: 8,
-				    title: 'Click for Google',
-				    start: new Date(y, m, 28),
-				    end: new Date(y, m, 29)				    
-				}
-			]
+			events: "json-events.php"
 		});
 		
 		/*Create event jQuery dialog*/
 		$("#dialog").dialog({
 			autoOpen: false,
-			height: 300,
-			width: 500,
+			height: 350,
+			width: 700,
 			modal: true,
 				buttons: {
 					'Create event': function () {
 					//get start date
-					var startsplt = $("#date-start").val().split("-");
+					var startsplt = $("#date-start").val().split("/");
 					var ends;
 					//get end date and time
 					if( $('#viewname').val() == "month" || document.getElementById("date-end").disabled == false)
-						ends = $("#date-end").val();
+						ends = $.fullCalendar.formatDate($("#date-end").datepicker("getDate"), 'MM/dd/yyyy');
 					else
 					{
 						ends =  $("#date-start").val();						
 						var timestr = $('#time-start').val().split(':');
 						var timestp = $('#time-end').val().split(':');						
 					}
-					var endsplt = ends.split("-");
+					var endsplt = ends.split("/");
 					var newid;
 					//string processing of the date values
 					if( startsplt[1].charAt(0) == '0' )
@@ -423,27 +335,26 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					{
 						endsplt[1] = endsplt[1].charAt(1);
 					}
-					if( startsplt[2].charAt(0) == '0' )
+					if( startsplt[0].charAt(0) == '0' )
 					{
-						startsplt[2] = startsplt[2].charAt(1);
+						startsplt[0] = startsplt[0].charAt(1);
 					}
-					if( endsplt[2].charAt(0) == '0' )
+					if( endsplt[0].charAt(0) == '0' )
 					{
-						endsplt[2] = endsplt[2].charAt(1);
+						endsplt[0] = endsplt[0].charAt(1);
 					}
 					//first send new events to db, db will return id and then display events in the calendar
 					if( $('#viewname').val() == "month" || document.getElementById("date-end").disabled == false)
 					{
-
-						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
-						var mysqlendd = $.fullCalendar.formatDate(new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1])), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlendd = $.fullCalendar.formatDate(new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1])), 'yyyy-MM-dd HH:mm')+":00";
 						$.get("update.php",{id:'',start:mysqlstartd, end:mysqlendd, title:$("#name").val(), cmd:"create",allday:"true"},function(data){ newid = data; 
 							calendar.fullCalendar('renderEvent',
 							{
 								id: newid, 
 								title: $("#name").val(),
-								start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])),
-								end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])),				                                allDay: true
+								start: new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1])),
+								end: new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]))				                            
 							},
 							true ); 
 						});
@@ -451,15 +362,15 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					}
 					else
 					{
-						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]), 'yyyy-MM-dd HH:mm')+":00";
-						var mysqlendd = $.fullCalendar.formatDate( new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1]),timestr[0],timestr[1]), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlendd = $.fullCalendar.formatDate( new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]),timestp[0],timestp[1]), 'yyyy-MM-dd HH:mm')+":00";
 						$.get("update.php",{id:'',start:mysqlstartd, end:mysqlendd, title:$("#name").val(), cmd:"create",allday:"false"}, function(data){ newid = data; 
 						calendar.fullCalendar('renderEvent',
 							{
 								id: newid,
 								title: $("#name").val(),
-								start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]),
-								end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]),
+								start: new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1]),timestr[0],timestr[1]),
+								end: new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]),timestp[0],timestp[1]),
 								allDay: false		                                        
 							},
 							true ); 
@@ -521,10 +432,10 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 				},
 				'Edit event': function () {
 				//get new values of time and date
-				var startsplt = $("#date-start1").val().split("-");
+				var startsplt = $("#date-start1").val().split("/");
 				var ends;
 				if( $('#viewname1').val() == "true" )
-					ends = $("#date-end1").val();
+					ends = $.fullCalendar.formatDate($("#date-end1").datepicker("getDate"), 'MM/dd/yyyy');
 				else
 				{
 					ends =  $("#date-start1").val();
@@ -532,7 +443,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					var timestr = $('#time-start1').val().split(':');
 					var timestp = $('#time-end1').val().split(':');						
 				}
-				var endsplt = ends.split("-");
+				var endsplt = ends.split("/");
 				
 				if( startsplt[1].charAt(0) == '0' )
 				{
@@ -542,19 +453,19 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 				{
 					endsplt[1] = endsplt[1].charAt(1);
 				}
-				if( startsplt[2].charAt(0) == '0' )
+				if( startsplt[0].charAt(0) == '0' )
 				{
-					startsplt[2] = startsplt[2].charAt(1);
+					startsplt[0] = startsplt[0].charAt(1);
 				}
-				if( endsplt[2].charAt(0) == '0' )
+				if( endsplt[0].charAt(0) == '0' )
 				{
-					endsplt[2] = endsplt[2].charAt(1);
+					endsplt[0] = endsplt[0].charAt(1);
 				}
 				//if allDay is true then only use dates otherwise use both dates and time values
 				if( $('#viewname1').val() == "true" )
 				{
-					var sdat = new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]));
-					var edat = new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]));
+					var sdat = new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1]));
+					var edat = new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]));
 					if( edat < sdat )
 					{
 						alert("Enter valid dates");
@@ -564,8 +475,8 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 				}
 				else
 				{
-					var sdat = new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]);
-					var edat = new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]);
+					var sdat = new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1]),timestr[0],timestr[1]);
+					var edat = new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]),timestp[0],timestp[1]);
 					if( edat < sdat )
 					{
 						alert("Enter valid dates");
@@ -608,15 +519,15 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 				//add edited event as a new event and also update db values
 				if( $('#viewname1').val() == "true" )
 					{
-						var mysqlendd = $.fullCalendar.formatDate(new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
-						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlendd = $.fullCalendar.formatDate(new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1])), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1])), 'yyyy-MM-dd HH:mm')+":00";
 						$.get("update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"true"});
 						calendar.fullCalendar('renderEvent',
 						{
 							id: $("#ori-name1").val(),
 							title: $("#name1").val(),
-							start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])),
-							end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]))				                                       
+							start: new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1])),
+							end: new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]))				                                       
 						},
 						true // make the event "stick"
 						);
@@ -624,15 +535,15 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					}
 					else
 					{
-						var mysqlendd = $.fullCalendar.formatDate( new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]), 'yyyy-MM-dd HH:mm')+":00";
-						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlendd = $.fullCalendar.formatDate( new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]),timestp[0],timestp[1]), 'yyyy-MM-dd HH:mm')+":00";
+						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1]),timestr[0],timestr[1]), 'yyyy-MM-dd HH:mm')+":00";
 						$.get("update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"false"});
 						calendar.fullCalendar('renderEvent',
 							{
 								id: $("#ori-name1").val(),
 								title: $("#name1").val(),
-								start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]),
-								end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]),
+								start: new Date(parseInt(startsplt[2]),parseInt(startsplt[0])-1,parseInt(startsplt[1]),timestr[0],timestr[1]),
+								end: new Date(parseInt(endsplt[2]),parseInt(endsplt[0])-1,parseInt(endsplt[1]),timestp[0],timestp[1]),
 								allDay: false	                                        
 							},
 						true // make the event "stick"
@@ -666,12 +577,12 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					<label for="name">Event Title</label>
 				</td>
 				<td>
-					<input type="text" name="name" id="name">
+					<input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all title">
 				</td>
 			</tr>                
 			<tr>
 				<td>
-					<label for="date-start">Start Date (yyyy-mm-dd)</label>
+					<label for="date-start">Start Date (mm/dd/yyyy)</label>
 				</td>
 				<td>
 					<label id="lbl-start-time" for ="time-start">Start Time (24hours)</label>
@@ -679,15 +590,15 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="date-start" id="date-start" disabled="disabled">
+					<input type="text" name="date-start" id="date-start" disabled="disabled" class="text ui-widget-content ui-corner-all">
 				</td>
 				<td>
-					<input type="text" name="time" id="time-start" disabled="disabled">
+					<input type="text" name="time" id="time-start" disabled="disabled" class="text ui-widget-content ui-corner-all">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label for="date-end">End Date (yyyy-mm-dd)</label>
+					<label for="date-end">End Date (mm/dd/yyyy)</label>
 				</td>
 				<td>
 					<label id="lbl-end-time" for ="time-end">End Time (24hours)</label>
@@ -695,10 +606,10 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="date" id="date-end">
+					<input type="text" name="date" id="date-end" class="text ui-widget-content ui-corner-all">
 				</td>
 				<td>
-					<select name="time" id="time-end">
+					<select name="time" id="time-end" class="text ui-widget-content ui-corner-all">
 					</select>
 				</td>
 			</tr>
@@ -715,12 +626,12 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 					<label for="name1">Event Title</label>
 				</td>
 				<td>
-					<input type="text" name="name" id="name1">
+					<input type="text" name="name" id="name1" class="text ui-widget-content ui-corner-all title">
 				</td>
 			</tr>                
 			<tr>
 				<td>
-					<label for="date-start1">Start Date (yyyy-mm-dd)</label>
+					<label for="date-start1">Start Date (mm/dd/yyyy)</label>
 				</td>
 				<td>
 					<label id="lbl-start-time1" for ="time-start1">Start Time (24hours)</label>
@@ -728,15 +639,15 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="date-start" id="date-start1">
+					<input type="text" name="date-start" id="date-start1" class="text ui-widget-content ui-corner-all">
 				</td>
 				<td id="container-fc-tm">
-					<input type="text" name="time" id="time-start1" disabled="disabled">
+					<input type="text" name="time" id="time-start1" disabled="disabled" class="text ui-widget-content ui-corner-all">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<label for="date-end1">End Date (yyyy-mm-dd)</label>
+					<label for="date-end1">End Date (mm/dd/yyyy)</label>
 				</td>
 				<td>
 					<label id="lbl-end-time1" for ="time-end1">End Time (24hours)</label>
@@ -744,10 +655,10 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="date" id="date-end1">
+					<input type="text" name="date" id="date-end1" class="text ui-widget-content ui-corner-all">
 				</td>
 				<td>
-					<select name="time" id="time-end1">
+					<select name="time" id="time-end1" class="text ui-widget-content ui-corner-all">
 					</select>
 				</td>
 			</tr>    
@@ -758,7 +669,5 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 		</div>
 	</div>
 	<div id="calendar"></div>
-	
-<?php
-require (AT_INCLUDE_PATH.'footer.inc.php'); 
-?>
+</body>
+</html>
