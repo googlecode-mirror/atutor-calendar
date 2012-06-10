@@ -6,9 +6,6 @@ $_custom_css = $_base_path . 'mods/calendar/fullcalendar/fullcalendar-theme.css'
 
 require (AT_INCLUDE_PATH.'header.inc.php');
 ?> 
-<a href='#' onclick='scwShow(this,event);return false;'>
-     2012-08-20
-</a>
 <script>
 	$(document).ready(function () {
 		/* Get current date for calculations. */
@@ -40,7 +37,10 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			eventAfterRender: function( evento,elemento,viewo ){
 				fluid.tooltip( elemento, {
 						content: function(){
-							return "Click or press enter to edit event";
+							if( evento.editable )
+							{
+								return "Click or press enter to edit event";
+							}
 						}
 					});
 			},
@@ -110,6 +110,8 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			},
 			/* Event is clicked. So open dialog for editing event. */
 			eventClick: function(calevent,jsEvent,view){
+				if( !calevent.editable ) //for atutor events
+					return;
 				$("#fc-emode1").val("edit");
 				$("#dialog1").dialog('open');	                
 				//display event name in the event title input box
@@ -389,7 +391,8 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 								id: newid, 
 								title: $("#name").val(),
 								start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])),
-								end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])),				                                allDay: true
+								end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])),				                                allDay: true,
+								editable: true
 							},
 							true ); 
 						});
@@ -406,7 +409,8 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 								title: $("#name").val(),
 								start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]),
 								end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]),
-								allDay: false		                                        
+								allDay: false,
+								editable: true		                                        
 							},
 							true ); 
 						});
@@ -562,7 +566,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 							id: $("#ori-name1").val(),
 							title: $("#name1").val(),
 							start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])),
-							end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]))				                                       
+							end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])),				                            editable: true           
 						},
 						true // make the event "stick"
 						);
@@ -579,7 +583,8 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 								title: $("#name1").val(),
 								start: new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]),
 								end: new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2]),timestp[0],timestp[1]),
-								allDay: false	                                        
+								allDay: false,
+								editable: true	                                        
 							},
 						true // make the event "stick"
 						);

@@ -1,23 +1,68 @@
 <?php
-	//Connect to database.
-	$con = mysql_connect("localhost","root","root");
-	if (!$con)
-	{
-	  die('Could not connect: ' . mysql_error());
-	}
-	//Select database "test".
-	mysql_select_db("test");
-	
 	//Retrieve all the events.
-	$query = "SELECT * FROM `full-calendar-events`";
-	$result = mysql_query($query);
+	define('AT_INCLUDE_PATH', '../../include/');
+	require (AT_INCLUDE_PATH.'vitals.inc.php');
+	global $db;
+	$query = "SELECT * FROM `".TABLE_PREFIX."full_calendar_events`";
+	$result = mysql_query($query,$db);
 	
 	//Create an empty array and push all the events in it.
 	$rows = array();
 	while ($row = mysql_fetch_assoc($result)) 
 	{
+		$row["editable"]=true;
 		array_push( $rows, $row );		
 	}
+	
+	function get_dates($all=null){
+		global $moduleFactory;
+		global $rows;
+		$coursesmod = $moduleFactory->getModule("_core/courses");
+		$courses=$coursesmod->extend_date();    
+		if( $courses != "" )
+		{
+			foreach ( $courses as $event )
+				array_push( $rows, $event );
+		}
+		
+		$assignmentsmod = $moduleFactory->getModule("_standard/assignments");
+		$assignments=$assignmentsmod->extend_date();
+		if( $assignments != "" )
+		{
+			foreach ( $assignments as $event )
+				array_push( $rows, $event );
+		}		
+		
+		$testsmod = $moduleFactory->getModule("_standard/tests");
+		$tests=$testsmod->extend_date();
+		if( $tests != "" )
+		{
+			foreach ( $tests as $event )
+				array_push( $rows, $event );
+		}
+	}
+	
+	if(isset($_SESSION['valid_user'])){
+
+		 if($_SESSION['valid_user']){         
+		 
+		 /* check if the user is enrolled in the course */
+			$sql = "SELECT COUNT(*) FROM
+				   `".TABLE_PREFIX."course_enrollment`
+					WHERE `member_id`='".$_SESSION['member_id']."'
+					AND   `course_id`='".$_SESSION['course_id']."'";
+			
+			$result = mysql_query($sql,$db);
+			$row = mysql_fetch_row($result);
+			
+			if($row[0]>0){
+				$dates = get_dates();      
+			}
+			else{
+			}
+		 }
+		 
+	 }
 	
 	//Encode in JSON format.
 	$str =  json_encode( $rows );
@@ -27,5 +72,5 @@
 	$str = str_replace('"false"','false',$str);
 	
 	//Return the events in the JSON format.
-	echo $str;
+	echo $str;	
 ?>

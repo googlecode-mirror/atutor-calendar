@@ -29,12 +29,13 @@ $_custom_head .=
 <script language="javascript" type="text/javascript" src="'.AT_BASE_HREF.'mods/calendar/fullcalendar/fullcalendar-theme.js"></script>
 <link href="'.AT_BASE_HREF.'mods/calendar/jquery/jquery-ui-1.8.20.custom.css" rel="stylesheet" type="text/css"/>
 
+<link href="'.AT_BASE_HREF.'mods/calendar/fullcalendar/fullcalendar-theme.css" rel="stylesheet" type="text/css"/>
 <link href="'.AT_BASE_HREF.'jscripts/infusion/lib/jquery/plugins/tooltip/css/jquery.tooltip.css" rel="stylesheet" type="text/css"/>';
 
 /*******
  * create a side menu box/stack.
  */
-$this->_stacks['calendar'] = array('title_var'=>'ATutor Calendar', 'file'=>'mods/calendar/side_menu.inc.php');
+$this->_stacks['calendar'] = array('title_var'=>'at_cal_header', 'file'=>'mods/calendar/side_menu.inc.php');
 // ** possible alternative: **
 // $this->addStack('calendar', array('title_var' => 'calendar', 'file' => './side_menu.inc.php');
 
@@ -66,7 +67,7 @@ $this->_pages['mods/calendar/index_instructor.php']['parent']   = 'tools/index.p
 /*******
  * student page.
  */
-$this->_pages['mods/calendar/index.php']['title_var'] = 'ATutor Calendar';
+$this->_pages['mods/calendar/index.php']['title_var'] = 'at_cal_header';
 $this->_pages['mods/calendar/index.php']['img']       = 'mods/calendar/img/calendar.png';
 
 /*******

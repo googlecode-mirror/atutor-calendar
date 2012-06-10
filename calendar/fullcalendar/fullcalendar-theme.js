@@ -773,15 +773,39 @@
                                 var hiddn;// Atutor - to store hidden message for the top buttons
                                 if( text.indexOf( "9668" ) > 0 )// previous symbol &9668;
                                 {
-                                    hiddn = "Previous";
+                                    $.ajax({
+									  url: "mods/calendar/getlanguage.php",
+									  async: false,
+									  data: {token: 'at_cal_prev'},
+									  success: function(data){
+												  hiddn = data;
+											   }
+									});
+									//hiddn = "Previous";
                                 }
                                 else if( text.indexOf( "9658" ) > 0 )// next symbol &9658;
                                 {
-                                    hiddn = "Next";
+                                    //hiddn = "Next";
+									$.ajax({
+									  url: "mods/calendar/getlanguage.php",
+									  async: false,
+									  data: {token: 'at_cal_next'},
+									  success: function(data){
+												  hiddn = data;
+											   }
+									});
                                 }
                                 else
                                 {
-                                    hiddn = "";
+                                    $.ajax({
+									  url: "mods/calendar/getlanguage.php",
+									  async: false,
+									  data: {token: 'at_cal_'+text},
+									  success: function(data){
+												  text = data;
+											   }
+									});
+									hiddn = "";
                                 }
                                 var button = $(
                                         "<span class='fc-button fc-button-" + buttonName + " " + tm + "-state-default'>" +
