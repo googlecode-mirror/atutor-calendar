@@ -15,6 +15,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 		var y = date.getFullYear();
 		
 		var activeelem;
+		var focusd = false;
 		
 		var calendar = $('#calendar').fullCalendar({
 		
@@ -45,6 +46,14 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 							}
 						}
 					});
+				if( focusd )
+				{
+					if( evento.id+"" == $("#ori-name1").val() )
+					{
+						elemento.focus();
+						focusd = false;
+					}
+				}
 			},
 			
 			/* Event is resized. So update db. */
@@ -128,11 +137,12 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			},
 			/* Event is clicked. So open dialog for editing event. */
 			eventClick: function(calevent,jsEvent,view){
+                if( document.activeElement.tagName == "A" )
+                    activeelem = document.activeElement;
+                    
 				if( !calevent.editable ) //for atutor events
-					return;
-				
-				activeelem = document.activeElement;
-					
+					return;			
+                
 				$("#fc-emode1").val("edit");
 				$("#dialog1").dialog('open');	                
 				//display event name in the event title input box
@@ -593,8 +603,9 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 						var mysqlendd = $.fullCalendar.formatDate(new Date(parseInt(endsplt[0]),parseInt(endsplt[1])-1,parseInt(endsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
 						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2])), 'yyyy-MM-dd HH:mm')+":00";
 						$.get("mods/calendar/update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"true"},function(data){
-								calendar.fullCalendar('refetchEvents');
-								activeelem.focus();
+								calendar.fullCalendar('refetchEvents'); 
+								//activeelem.focus();
+								focusd = true;
 							});
 						/*calendar.fullCalendar('renderEvent',
 						{
@@ -606,6 +617,7 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 						true // make the event "stick"
 						);*/
 						$(this).dialog('close');
+                        console.log( activeelem.innerHTML );
 					}
 					else
 					{
@@ -613,7 +625,8 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 						var mysqlstartd = $.fullCalendar.formatDate(new Date(parseInt(startsplt[0]),parseInt(startsplt[1])-1,parseInt(startsplt[2]),timestr[0],timestr[1]), 'yyyy-MM-dd HH:mm')+":00";
 						$.get("mods/calendar/update.php",{id:$("#ori-name1").val(),start:mysqlstartd, end:mysqlendd, title:$("#name1").val(), cmd:"update",allday:"false"},function(data){
 								calendar.fullCalendar('refetchEvents');
-								activeelem.focus();
+								//activeelem.focus();
+								focusd = true;
 							});
 						/*calendar.fullCalendar('renderEvent',
 							{
