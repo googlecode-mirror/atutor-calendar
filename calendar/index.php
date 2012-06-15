@@ -38,14 +38,23 @@ require (AT_INCLUDE_PATH.'header.inc.php');
 			
 			/* Add tooltip to events after they are rendered. */
 			eventAfterRender: function( evento,elemento,viewo ){
-				fluid.tooltip( elemento, {
-						content: function(){
-							if( evento.editable )
-							{
+				if( !evento.editable )
+				{
+					var childo = elemento.children();
+					if( viewo.name == "month" )
+						childo[1].innerHTML += "<div class='fc-unedit-announce'>Uneditable event</div>";
+					else
+						childo[0].innerHTML += "<div class='fc-unedit-announce'>Uneditable event</div>";
+					//elemento.append("<div class='fc-unedit-announce'>Uneditable event</div>");
+				}
+				else
+				{
+					fluid.tooltip( elemento, {
+							content: function(){
 								return "Click or press enter to edit event";
 							}
-						}
-					});
+						});
+				}
 				if( focusd )
 				{
 					if( evento.id+"" == $("#ori-name1").val() )
